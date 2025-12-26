@@ -1,0 +1,102 @@
+﻿@model IEnumerable<VPProject.Models.Cart>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>🛒 Shopping Cart</h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">← Continue Shopping</a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@item.Product.ProductName</strong>
+                                        </td>
+                                        <td>$@item.Price.ToString("N2")</td>
+                                        <td>
+                                            <form method="post" asp-action="UpdateCart" class="d-inline">
+                                                <input type="hidden" name="cartId" value="@item.CartId" />
+                                                <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="width: 80px; display: inline;" />
+                                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                            </form>
+                                        </td>
+                                        <td><strong>$@((item.Price * item.Quantity).ToString("N2"))</strong></td>
+                                        <td>
+                                            <form method="post" asp-action="RemoveFromCart" class="d-inline">
+                                                <input type="hidden" name="cartId" value="@item.CartId" />
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove this item?')">🗑️ Remove</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal:</span>
+                            <strong>$@ViewBag.Total.ToString("N2")</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Tax:</span>
+                            <strong>$0.00</strong>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5>Total:</h5>
+                            <h5 class="text-primary">$@ViewBag.Total.ToString("N2")</h5>
+                        </div>
+                        <div class="d-grid">
+                            <a asp-action="Checkout" class="btn btn-success btn-lg">Proceed to Checkout →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body py-5">
+                        <h3>Your cart is empty</h3>
+                        <p class="text-muted">Add some products to your cart to get started!</p>
+                        <a asp-action="Index" class="btn btn-primary mt-3">Start Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

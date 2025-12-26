@@ -1,0 +1,100 @@
+﻿@model VPProject.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                        <h1 class="text-success mt-3">✓ Order Placed Successfully!</h1>
+                        <p class="text-muted">Thank you for your purchase</p>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h4>Order #@Model.OrderId</h4>
+                        <p class="mb-0">Order Date: @Model.OrderDate.ToString("MMMM dd, yyyy")</p>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Order Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>@item.Product.ProductName</td>
+                                            <td>$@item.Price.ToString("N2")</td>
+                                            <td>@item.Quantity</td>
+                                            <td>$@((item.Price * item.Quantity).ToString("N2"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                        <td><strong>$@Model.TotalAmount.ToString("N2")</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Delivery Information</h5>
+                        </div>
+                        <div class="card-body text-start">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Name:</dt>
+                                <dd class="col-sm-8">@Model.Customer.CustomerName</dd>
+
+                                <dt class="col-sm-4">Phone:</dt>
+                                <dd class="col-sm-8">@Model.Customer.Phone</dd>
+
+                                <dt class="col-sm-4">Address:</dt>
+                                <dd class="col-sm-8">@Model.Customer.Address</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a asp-action="Index" class="btn btn-primary btn-lg">Continue Shopping</a>
+                        <a asp-action="MyOrders" class="btn btn-outline-secondary">View All Orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bi-check-circle-fill {
+        animation: scaleIn 0.5s ease-in-out;
+    }
+
+    @@keyframes scaleIn {
+        from {
+            transform: scale(0);
+        }
+
+        to {
+            transform: scale(1);
+        }
+    }
+</style>

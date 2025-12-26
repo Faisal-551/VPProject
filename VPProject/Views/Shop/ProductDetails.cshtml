@@ -1,0 +1,87 @@
+﻿@model VPProject.Models.Product
+
+@{
+    ViewData["Title"] = Model.ProductName;
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <a asp-action="Index" class="btn btn-outline-secondary">← Back to Products</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.ProductName" />
+            }
+            else
+            {
+                <div class="bg-secondary d-flex align-items-center justify-content-center rounded shadow" style="height: 400px;">
+                    <span class="text-white h3">No Image Available</span>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="mb-3">@Model.ProductName</h1>
+
+                    <div class="mb-3">
+                        <span class="badge bg-info">@Model.Category.CategoryName</span>
+                    </div>
+
+                    <h2 class="text-primary mb-4">$@Model.Price.ToString("N2")</h2>
+
+                    <hr />
+
+                    <div class="mb-4">
+                        <h5>Product Details:</h5>
+                        <dl class="row">
+                            <dt class="col-sm-4">Product ID:</dt>
+                            <dd class="col-sm-8">#@Model.ProductId</dd>
+
+                            <dt class="col-sm-4">Category:</dt>
+                            <dd class="col-sm-8">@Model.Category.CategoryName</dd>
+
+                            <dt class="col-sm-4">Price:</dt>
+                            <dd class="col-sm-8 text-success"><strong>$@Model.Price.ToString("N2")</strong></dd>
+                        </dl>
+                    </div>
+
+                    @if (Context.Session.GetString("CustomerName") != null)
+                    {
+                        <form method="post" asp-action="AddToCart">
+                            <input type="hidden" name="productId" value="@Model.ProductId" />
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="quantity" class="form-label">Quantity:</label>
+                                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="10" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    🛒 Add to Cart
+                                </button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            Please <a asp-action="CustomerLogin" class="alert-link">login</a> to add products to cart.
+                        </div>
+                        <div class="d-grid">
+                            <a asp-action="CustomerLogin" class="btn btn-secondary btn-lg">Login to Buy</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

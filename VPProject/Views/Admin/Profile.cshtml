@@ -1,0 +1,116 @@
+﻿@model VPProject.Models.Admin
+
+@{
+    ViewData["Title"] = "Admin Profile";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>👤 Admin Profile</h1>
+            <a asp-action="Dashboard" class="btn btn-outline-secondary">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @ViewBag.Success
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Edit Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Profile">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <input type="hidden" asp-for="AdminId" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Username" class="form-label">Username</label>
+                            <input asp-for="Username" class="form-control" readonly />
+                            <small class="text-muted">Username cannot be changed</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FullName" class="form-label">Full Name</label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Email Address</label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <small class="text-muted">Enter new password or leave blank to keep current</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Role" class="form-label">Role</label>
+                            <input asp-for="Role" class="form-control" readonly />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">💾 Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Admin ID:</dt>
+                        <dd class="col-sm-7">#@Model.AdminId</dd>
+
+                        <dt class="col-sm-5">Username:</dt>
+                        <dd class="col-sm-7">@Model.Username</dd>
+
+                        <dt class="col-sm-5">Role:</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-success">@Model.Role</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-warning">
+                    <h6 class="mb-0">⚠️ Security Tips</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Use a strong password</li>
+                        <li>Don't share your credentials</li>
+                        <li>Logout after use</li>
+                        <li>Keep your email updated</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
